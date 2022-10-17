@@ -24,6 +24,8 @@
 
 package com.evrencoskun.tableview.listener;
 
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -31,8 +33,6 @@ import androidx.annotation.NonNull;
 import com.evrencoskun.tableview.ITableView;
 import com.evrencoskun.tableview.adapter.recyclerview.CellRecyclerView;
 import com.evrencoskun.tableview.layoutmanager.CellLayoutManager;
-
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * Created by evrencoskun on 21.01.2018.
@@ -44,11 +44,14 @@ public class TableViewLayoutChangeListener implements View.OnLayoutChangeListene
     @NonNull
     private final CellRecyclerView mColumnHeaderRecyclerView;
     @NonNull
+    private final CellRecyclerView mColumnBottomRecyclerView;
+    @NonNull
     private final CellLayoutManager mCellLayoutManager;
 
     public TableViewLayoutChangeListener(@NonNull ITableView tableView) {
         this.mCellRecyclerView = tableView.getCellRecyclerView();
         this.mColumnHeaderRecyclerView = tableView.getColumnHeaderRecyclerView();
+        this.mColumnBottomRecyclerView = tableView.getColumnBottomRecyclerView();
         this.mCellLayoutManager = tableView.getCellLayoutManager();
     }
 
@@ -63,11 +66,20 @@ public class TableViewLayoutChangeListener implements View.OnLayoutChangeListene
                 // Remeasure all nested CellRow recyclerViews
                 mCellLayoutManager.remeasureAllChild();
 
+            } else if (mColumnBottomRecyclerView.getWidth() > mCellRecyclerView.getWidth()) {
+                // Remeasure all nested CellRow recyclerViews
+                mCellLayoutManager.remeasureAllChild();
+
             } else if (mCellRecyclerView.getWidth() > mColumnHeaderRecyclerView.getWidth()) {
 
                 // It seems Column Header is needed.
                 mColumnHeaderRecyclerView.getLayoutParams().width = WRAP_CONTENT;
                 mColumnHeaderRecyclerView.requestLayout();
+            } else if (mCellRecyclerView.getWidth() > mColumnBottomRecyclerView.getWidth()) {
+
+                // It seems Column Bottom is needed.
+                mColumnBottomRecyclerView.getLayoutParams().width = WRAP_CONTENT;
+                mColumnBottomRecyclerView.requestLayout();
             }
         }
     }

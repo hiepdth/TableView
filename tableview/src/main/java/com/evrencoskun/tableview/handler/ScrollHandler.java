@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.evrencoskun.tableview.ITableView;
 import com.evrencoskun.tableview.layoutmanager.CellLayoutManager;
+import com.evrencoskun.tableview.layoutmanager.ColumnBottomLayoutManager;
 import com.evrencoskun.tableview.layoutmanager.ColumnHeaderLayoutManager;
 import com.evrencoskun.tableview.layoutmanager.ColumnLayoutManager;
 
@@ -48,12 +49,15 @@ public class ScrollHandler {
     private final LinearLayoutManager mRowHeaderLayoutManager;
     @NonNull
     private final ColumnHeaderLayoutManager mColumnHeaderLayoutManager;
+    @NonNull
+    private final ColumnBottomLayoutManager mColumnBottomLayoutManager;
 
     public ScrollHandler(@NonNull ITableView tableView) {
         this.mTableView = tableView;
         this.mCellLayoutManager = tableView.getCellLayoutManager();
         this.mRowHeaderLayoutManager = tableView.getRowHeaderLayoutManager();
         this.mColumnHeaderLayoutManager = tableView.getColumnHeaderLayoutManager();
+        this.mColumnBottomLayoutManager = tableView.getColumnBottomLayoutManager();
     }
 
     public void scrollToColumnPosition(int columnPosition) {

@@ -24,6 +24,7 @@
 
 <resources>
     <item name="ColumnHeaderRecyclerView" type="id"/>
+    <item name="ColumnBottomRecyclerView" type="id"/>
     <item name="RowHeaderRecyclerView" type="id"/>
     <item name="CellRecyclerView" type="id"/>
 </resources>

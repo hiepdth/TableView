@@ -28,7 +28,7 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-public abstract class AdapterDataSetChangedListener<CH, RH, C> {
+public abstract class AdapterDataSetChangedListener<CH, CB, RH, C> {
 
     /**
      * Dispatches changes on column header items to listener.
@@ -36,6 +36,14 @@ public abstract class AdapterDataSetChangedListener<CH, RH, C> {
      * @param columnHeaderItems The current column header items.
      */
     public void onColumnHeaderItemsChanged(@NonNull List<CH> columnHeaderItems) {
+    }
+
+    /**
+     * Dispatches changes on column bottom items to listener.
+     *
+     * @param columnBottomItems The current column bottom items.
+     */
+    public void onColumnBottomItemsChanged(@NonNull List<CB> columnBottomItems) {
     }
 
     /**
@@ -58,11 +66,13 @@ public abstract class AdapterDataSetChangedListener<CH, RH, C> {
      * Dispatches the changes on column header, row header and cell items.
      *
      * @param columnHeaderItems The current column header items.
+     * @param columnBottomItems The current column bottom items.
      * @param rowHeaderItems    The current row header items.
      * @param cellItems         The current cell items.
      */
     public void onDataSetChanged(
             List<CH> columnHeaderItems,
+            List<CB> columnBottomItems,
             List<RH> rowHeaderItems,
             List<List<C>> cellItems) {
     }

@@ -37,11 +37,13 @@ import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
 import com.evrencoskun.tableview.sort.SortState;
 import com.evrencoskun.tableviewsample.R;
 import com.evrencoskun.tableviewsample.tableview.holder.CellViewHolder;
+import com.evrencoskun.tableviewsample.tableview.holder.ColumnBottomViewHolder;
 import com.evrencoskun.tableviewsample.tableview.holder.ColumnHeaderViewHolder;
 import com.evrencoskun.tableviewsample.tableview.holder.GenderCellViewHolder;
 import com.evrencoskun.tableviewsample.tableview.holder.MoodCellViewHolder;
 import com.evrencoskun.tableviewsample.tableview.holder.RowHeaderViewHolder;
 import com.evrencoskun.tableviewsample.tableview.model.Cell;
+import com.evrencoskun.tableviewsample.tableview.model.ColumnBottom;
 import com.evrencoskun.tableviewsample.tableview.model.ColumnHeader;
 import com.evrencoskun.tableviewsample.tableview.model.RowHeader;
 
@@ -51,7 +53,7 @@ import com.evrencoskun.tableviewsample.tableview.model.RowHeader;
  * This is a sample of custom TableView Adapter.
  */
 
-public class TableViewAdapter extends AbstractTableAdapter<ColumnHeader, RowHeader, Cell> {
+public class TableViewAdapter extends AbstractTableAdapter<ColumnHeader, ColumnBottom, RowHeader, Cell> {
 
     // Cell View Types by Column Position
     private static final int MOOD_CELL_TYPE = 1;
@@ -189,6 +191,24 @@ public class TableViewAdapter extends AbstractTableAdapter<ColumnHeader, RowHead
         columnHeaderViewHolder.setColumnHeader(columnHeaderItemModel);
     }
 
+    @NonNull
+    @Override
+    public AbstractViewHolder onCreateColumnBottomViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View layout = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.table_view_column_bottom_layout, parent, false);
+
+        return new ColumnBottomViewHolder(layout, getTableView());
+    }
+
+    @Override
+    public void onBindColumnBottomViewHolder(@NonNull AbstractViewHolder holder, @Nullable ColumnBottom
+            columnBottomItemModel, int columnPosition) {
+
+        // Get the holder to update cell item text
+        ColumnBottomViewHolder columnBottomViewHolder = (ColumnBottomViewHolder) holder;
+        columnBottomViewHolder.setColumnBottom(columnBottomItemModel);
+    }
+
     /**
      * This is where you create your custom Row Header ViewHolder. This method is called when
      * Row Header RecyclerView of the TableView needs a new RecyclerView.ViewHolder of the given
@@ -258,6 +278,11 @@ public class TableViewAdapter extends AbstractTableAdapter<ColumnHeader, RowHead
         // If you have different items for Cell View by X (Column) position,
         // then you should fill this method to be able create different
         // type of CellViewHolder on "onCreateCellViewHolder"
+        return 0;
+    }
+
+    @Override
+    public int getColumnBottomItemViewType(int position) {
         return 0;
     }
 

@@ -42,6 +42,7 @@ import com.evrencoskun.tableview.handler.ScrollHandler;
 import com.evrencoskun.tableview.handler.SelectionHandler;
 import com.evrencoskun.tableview.handler.VisibilityHandler;
 import com.evrencoskun.tableview.layoutmanager.CellLayoutManager;
+import com.evrencoskun.tableview.layoutmanager.ColumnBottomLayoutManager;
 import com.evrencoskun.tableview.layoutmanager.ColumnHeaderLayoutManager;
 import com.evrencoskun.tableview.listener.ITableViewListener;
 import com.evrencoskun.tableview.listener.scroll.HorizontalRecyclerViewListener;
@@ -78,10 +79,16 @@ public interface ITableView {
     CellRecyclerView getColumnHeaderRecyclerView();
 
     @NonNull
+    CellRecyclerView getColumnBottomRecyclerView();
+
+    @NonNull
     CellRecyclerView getRowHeaderRecyclerView();
 
     @NonNull
     ColumnHeaderLayoutManager getColumnHeaderLayoutManager();
+
+    @NonNull
+    ColumnBottomLayoutManager getColumnBottomLayoutManager();
 
     @NonNull
     CellLayoutManager getCellLayoutManager();

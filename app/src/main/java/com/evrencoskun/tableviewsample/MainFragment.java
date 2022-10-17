@@ -128,8 +128,11 @@ public class MainFragment extends Fragment {
         //mTableFilter = new Filter(mTableView);
 
         // Load the dummy data to the TableView
-        tableViewAdapter.setAllItems(tableViewModel.getColumnHeaderList(), tableViewModel
-                .getRowHeaderList(), tableViewModel.getCellList());
+        tableViewAdapter.setAllItems(
+                tableViewModel.getColumnHeaderList(),
+                tableViewModel.getColumnBottomList(),
+                tableViewModel.getRowHeaderList(),
+                tableViewModel.getCellList());
 
         //mTableView.setHasFixedWidth(true);
 

@@ -46,6 +46,10 @@ public class HorizontalRecyclerViewListener extends RecyclerView.OnScrollListene
 
     @NonNull
     private final CellRecyclerView mColumnHeaderRecyclerView;
+
+    @NonNull
+    private final CellRecyclerView mColumnBottomRecyclerView;
+
     @Nullable
     private final RecyclerView.LayoutManager mCellLayoutManager;
     @Nullable
@@ -66,6 +70,7 @@ public class HorizontalRecyclerViewListener extends RecyclerView.OnScrollListene
 
     public HorizontalRecyclerViewListener(@NonNull ITableView tableView) {
         this.mColumnHeaderRecyclerView = tableView.getColumnHeaderRecyclerView();
+        this.mColumnBottomRecyclerView = tableView.getColumnBottomRecyclerView();
         this.mCellLayoutManager = tableView.getCellRecyclerView().getLayoutManager();
         this.mVerticalRecyclerViewListener = tableView.getVerticalRecyclerViewListener();
     }
@@ -84,11 +89,17 @@ public class HorizontalRecyclerViewListener extends RecyclerView.OnScrollListene
             if (rv.getScrollState() == RecyclerView.SCROLL_STATE_IDLE) {
 
                 if (mLastTouchedRecyclerView != null && rv != mLastTouchedRecyclerView) {
-                    if (mLastTouchedRecyclerView == mColumnHeaderRecyclerView) {
+                    if (mLastTouchedRecyclerView == mColumnHeaderRecyclerView ||
+                            mLastTouchedRecyclerView == mColumnBottomRecyclerView) {
                         mColumnHeaderRecyclerView.removeOnScrollListener(this);
                         mColumnHeaderRecyclerView.stopScroll();
                         Log.d(LOG_TAG, "Scroll listener  has been removed to " +
                                 "mColumnHeaderRecyclerView at last touch control");
+
+                        mColumnBottomRecyclerView.removeOnScrollListener(this);
+                        mColumnBottomRecyclerView.stopScroll();
+                        Log.d(LOG_TAG, "Scroll listener  has been removed to " +
+                                "mColumnBottomRecyclerView at last touch control");
                     } else {
                         int lastTouchedIndex = getIndex(mLastTouchedRecyclerView);
 
@@ -185,6 +196,21 @@ public class HorizontalRecyclerViewListener extends RecyclerView.OnScrollListene
         if (recyclerView == mColumnHeaderRecyclerView) {
             super.onScrolled(recyclerView, dx, dy);
 
+            // Scroll bottom cloumn
+            mColumnBottomRecyclerView.scrollBy(dx, dy);
+
+            // Scroll each cell recyclerViews
+            for (int i = 0; i < mCellLayoutManager.getChildCount(); i++) {
+                CellRecyclerView child = (CellRecyclerView) mCellLayoutManager.getChildAt(i);
+                // Scroll horizontally
+                child.scrollBy(dx, 0);
+            }
+        } else if (recyclerView == mColumnBottomRecyclerView) {
+            super.onScrolled(recyclerView, dx, dy);
+
+            // Scroll bottom cloumn
+            mColumnHeaderRecyclerView.scrollBy(dx, dy);
+
             // Scroll each cell recyclerViews
             for (int i = 0; i < mCellLayoutManager.getChildCount(); i++) {
                 CellRecyclerView child = (CellRecyclerView) mCellLayoutManager.getChildAt(i);
@@ -196,6 +222,8 @@ public class HorizontalRecyclerViewListener extends RecyclerView.OnScrollListene
             //mColumnHeaderRecyclerView.scrollBy(dx, 0);
 
             super.onScrolled(recyclerView, dx, dy);
+            mColumnHeaderRecyclerView.scrollBy(dx, dy);
+            mColumnBottomRecyclerView.scrollBy(dx, dy);
 
             // Scroll each cell recyclerViews except the current touched one
             for (int i = 0; i < mCellLayoutManager.getChildCount(); i++) {
@@ -225,7 +253,7 @@ public class HorizontalRecyclerViewListener extends RecyclerView.OnScrollListene
             // listener because of touching process.However, mVerticalRecyclerViewListener
             // doesn't know anything about it. So, it is necessary to remove the last touched
             // recyclerView which uses the mVerticalRecyclerViewListener.
-            boolean isNeeded = mLastTouchedRecyclerView != mColumnHeaderRecyclerView;
+            boolean isNeeded = mLastTouchedRecyclerView != mColumnHeaderRecyclerView && mLastTouchedRecyclerView != mColumnBottomRecyclerView;
             mVerticalRecyclerViewListener.removeLastTouchedRecyclerViewScrollListener(isNeeded);
         }
     }

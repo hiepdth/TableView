@@ -37,9 +37,11 @@ import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
  * Created by evrencoskun on 10/06/2017.
  */
 
-public interface ITableAdapter<CH, RH, C> {
+public interface ITableAdapter<CH, CB, RH, C> {
 
     int getColumnHeaderItemViewType(int position);
+
+    int getColumnBottomItemViewType(int position);
 
     int getRowHeaderItemViewType(int position);
 
@@ -55,7 +57,12 @@ public interface ITableAdapter<CH, RH, C> {
     @NonNull
     AbstractViewHolder onCreateColumnHeaderViewHolder(@NonNull ViewGroup parent, int viewType);
 
-    void onBindColumnHeaderViewHolder(@NonNull AbstractViewHolder holder, @Nullable CH columnHeaderItemModel, int columnPosition);
+    void onBindColumnHeaderViewHolder(@NonNull AbstractViewHolder holder, @Nullable CH columnBottomItemModel, int columnPosition);
+
+    @NonNull
+    AbstractViewHolder onCreateColumnBottomViewHolder(@NonNull ViewGroup parent, int viewType);
+
+    void onBindColumnBottomViewHolder(@NonNull AbstractViewHolder holder, @Nullable CB columnBottomItemModel, int columnPosition);
 
     @NonNull
     AbstractViewHolder onCreateRowHeaderViewHolder(@NonNull ViewGroup parent, int viewType);
@@ -72,5 +79,5 @@ public interface ITableAdapter<CH, RH, C> {
      *
      * @param listener The AdapterDataSetChangedListener listener.
      */
-    void addAdapterDataSetChangedListener(@NonNull AdapterDataSetChangedListener<CH, RH, C> listener);
+    void addAdapterDataSetChangedListener(@NonNull AdapterDataSetChangedListener<CH, CB, RH, C> listener);
 }

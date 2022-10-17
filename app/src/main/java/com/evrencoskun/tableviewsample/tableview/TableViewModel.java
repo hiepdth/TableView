@@ -29,6 +29,7 @@ import androidx.annotation.NonNull;
 
 import com.evrencoskun.tableviewsample.R;
 import com.evrencoskun.tableviewsample.tableview.model.Cell;
+import com.evrencoskun.tableviewsample.tableview.model.ColumnBottom;
 import com.evrencoskun.tableviewsample.tableview.model.ColumnHeader;
 import com.evrencoskun.tableviewsample.tableview.model.RowHeader;
 
@@ -110,6 +111,27 @@ public class TableViewModel {
      * This is a dummy model list test some cases.
      */
     @NonNull
+    private List<ColumnBottom> getRandomColumnBottomList() {
+        List<ColumnBottom> list = new ArrayList<>();
+
+        for (int i = 0; i < COLUMN_SIZE; i++) {
+            String title = "column " + i;
+            int nRandom = new Random().nextInt();
+            if (nRandom % 4 == 0 || nRandom % 3 == 0 || nRandom == i) {
+                title = "large column " + i;
+            }
+
+            ColumnBottom header = new ColumnBottom(String.valueOf(i), title);
+            list.add(header);
+        }
+
+        return list;
+    }
+
+    /**
+     * This is a dummy model list test some cases.
+     */
+    @NonNull
     private List<List<Cell>> getCellListForSortingTest() {
         List<List<Cell>> list = new ArrayList<>();
         for (int i = 0; i < ROW_SIZE; i++) {
@@ -171,5 +193,10 @@ public class TableViewModel {
     @NonNull
     public List<ColumnHeader> getColumnHeaderList() {
         return getRandomColumnHeaderList();
+    }
+
+    @NonNull
+    public List<ColumnBottom> getColumnBottomList() {
+        return getRandomColumnBottomList();
     }
 }

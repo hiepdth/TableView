@@ -22,34 +22,17 @@
  * SOFTWARE.
  */
 
-package com.evrencoskun.tableview.handler;
+package com.evrencoskun.tableviewsample.tableview.model;
 
 import androidx.annotation.NonNull;
-
-import com.evrencoskun.tableview.ITableView;
+import androidx.annotation.Nullable;
 
 /**
- * Created by evrencoskun on 25.04.2018.
+ * Created by evrencoskun on 11/06/2017.
  */
 
-public class ColumnWidthHandler {
-    @NonNull
-    private final ITableView mTableView;
-
-    public ColumnWidthHandler(@NonNull ITableView tableView) {
-        mTableView = tableView;
+public class ColumnBottom extends Cell {
+    public ColumnBottom(@NonNull String id, @Nullable String data) {
+        super(id, data);
     }
-
-    public void setColumnWidth(int columnPosition, int width) {
-
-        // Firstly set the column header cache map
-        mTableView.getColumnHeaderLayoutManager().setCacheWidth(columnPosition, width);
-
-        // Secondary set the column header cache map
-        mTableView.getColumnBottomLayoutManager().setCacheWidth(columnPosition, width);
-
-        // Set each of cell items that is located on the column position
-        mTableView.getCellLayoutManager().setCacheWidth(columnPosition, width);
-    }
-
 }

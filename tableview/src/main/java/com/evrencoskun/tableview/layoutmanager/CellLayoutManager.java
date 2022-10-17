@@ -54,7 +54,8 @@ public class CellLayoutManager extends LinearLayoutManager {
 
     @NonNull
     private final ColumnHeaderLayoutManager mColumnHeaderLayoutManager;
-
+    @NonNull
+    private final ColumnBottomLayoutManager mColumnBottomLayoutManager;
     @NonNull
     private final CellRecyclerView mRowHeaderRecyclerView;
 
@@ -74,6 +75,7 @@ public class CellLayoutManager extends LinearLayoutManager {
         super(context);
         this.mTableView = tableView;
         this.mColumnHeaderLayoutManager = tableView.getColumnHeaderLayoutManager();
+        this.mColumnBottomLayoutManager = tableView.getColumnBottomLayoutManager();
         this.mRowHeaderRecyclerView = tableView.getRowHeaderRecyclerView();
 
         initialize();
