@@ -52,6 +52,10 @@ public class ColumnLayoutManager extends LinearLayoutManager {
     @NonNull
     private final ColumnHeaderLayoutManager mColumnHeaderLayoutManager;
     @NonNull
+    private final CellRecyclerView mColumnBottomRecyclerView;
+    @NonNull
+    private final ColumnBottomLayoutManager mColumnBottomLayoutManager;
+    @NonNull
     private final CellLayoutManager mCellLayoutManager;
 
     private boolean mNeedFitForVerticalScroll, mNeedFitForHorizontalScroll;
@@ -63,6 +67,8 @@ public class ColumnLayoutManager extends LinearLayoutManager {
         this.mTableView = tableView;
         this.mColumnHeaderRecyclerView = mTableView.getColumnHeaderRecyclerView();
         this.mColumnHeaderLayoutManager = mTableView.getColumnHeaderLayoutManager();
+        this.mColumnBottomRecyclerView = mTableView.getColumnBottomRecyclerView();
+        this.mColumnBottomLayoutManager = mTableView.getColumnBottomLayoutManager();
         this.mCellLayoutManager = mTableView.getCellLayoutManager();
 
         // Set default orientation
@@ -99,8 +105,10 @@ public class ColumnLayoutManager extends LinearLayoutManager {
 
         // Get cached width size of column and cell
         int cacheWidth = mCellLayoutManager.getCacheWidth(mYPosition, columnPosition);
-        int columnCacheWidth = mColumnHeaderLayoutManager.getCacheWidth(columnPosition);
+        int columnHeaderCacheWidth = mColumnHeaderLayoutManager.getCacheWidth(columnPosition);
+        int columnBottomCacheWidth = mColumnBottomLayoutManager.getCacheWidth(columnPosition);
 
+        int columnCacheWidth = Math.max(columnHeaderCacheWidth, columnBottomCacheWidth);
         // Already each of them is same width size.
         if (cacheWidth != -1 && cacheWidth == columnCacheWidth) {
             // Control whether we need to set width or not.

@@ -256,7 +256,7 @@ public class TableView extends RelativeLayout implements ITableView {
         mCellRecyclerView.setId(R.id.CellRecyclerView);
 
         // Add Views
-//        addView(mColumnHeaderRecyclerView);
+        addView(mColumnHeaderRecyclerView);
         addView(mRowHeaderRecyclerView);
         addView(mCellRecyclerView);
         addView(mColumnBottomRecyclerView);
@@ -285,7 +285,7 @@ public class TableView extends RelativeLayout implements ITableView {
         mHorizontalRecyclerViewListener = new HorizontalRecyclerViewListener(this);
         // Set scroll listener to be able to scroll all rows synchrony.
         mColumnHeaderRecyclerView.addOnItemTouchListener(mHorizontalRecyclerViewListener);
-        mColumnBottomRecyclerView.addOnItemTouchListener(mHorizontalRecyclerViewListener);
+//        mColumnBottomRecyclerView.addOnItemTouchListener(mHorizontalRecyclerViewListener);
 
         // --- Listeners to help item clicks ---
         // Create item click listeners
@@ -310,9 +310,9 @@ public class TableView extends RelativeLayout implements ITableView {
         // For some case, it is pretty necessary.
         TableViewLayoutChangeListener layoutChangeListener = new TableViewLayoutChangeListener
                 (this);
-        mColumnHeaderRecyclerView.addOnLayoutChangeListener(layoutChangeListener);
-        mColumnBottomRecyclerView.addOnLayoutChangeListener(layoutChangeListener);
-        mCellRecyclerView.addOnLayoutChangeListener(layoutChangeListener);
+//        mColumnHeaderRecyclerView.addOnLayoutChangeListener(layoutChangeListener);
+//        mColumnBottomRecyclerView.addOnLayoutChangeListener(layoutChangeListener);
+//        mCellRecyclerView.addOnLayoutChangeListener(layoutChangeListener);
 
     }
 
