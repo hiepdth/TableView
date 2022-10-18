@@ -285,7 +285,7 @@ public class TableView extends RelativeLayout implements ITableView {
         mHorizontalRecyclerViewListener = new HorizontalRecyclerViewListener(this);
         // Set scroll listener to be able to scroll all rows synchrony.
         mColumnHeaderRecyclerView.addOnItemTouchListener(mHorizontalRecyclerViewListener);
-//        mColumnBottomRecyclerView.addOnItemTouchListener(mHorizontalRecyclerViewListener);
+        mColumnBottomRecyclerView.addOnItemTouchListener(mHorizontalRecyclerViewListener);
 
         // --- Listeners to help item clicks ---
         // Create item click listeners
@@ -360,7 +360,7 @@ public class TableView extends RelativeLayout implements ITableView {
             layoutParams.leftMargin = mRowHeaderWidth;
         }
 
-        layoutParams.topMargin = 140;
+        layoutParams.topMargin = mColumnHeaderHeight;
         recyclerView.setLayoutParams(layoutParams);
 
         if (isShowHorizontalSeparators()) {

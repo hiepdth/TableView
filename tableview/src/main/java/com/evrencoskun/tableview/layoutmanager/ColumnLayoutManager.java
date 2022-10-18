@@ -48,6 +48,8 @@ public class ColumnLayoutManager extends LinearLayoutManager {
     private final ITableView mTableView;
     private CellRecyclerView mCellRowRecyclerView;
     @NonNull
+    private final CellLayoutManager mCellLayoutManager;
+    @NonNull
     private final CellRecyclerView mColumnHeaderRecyclerView;
     @NonNull
     private final ColumnHeaderLayoutManager mColumnHeaderLayoutManager;
@@ -55,8 +57,6 @@ public class ColumnLayoutManager extends LinearLayoutManager {
     private final CellRecyclerView mColumnBottomRecyclerView;
     @NonNull
     private final ColumnBottomLayoutManager mColumnBottomLayoutManager;
-    @NonNull
-    private final CellLayoutManager mCellLayoutManager;
 
     private boolean mNeedFitForVerticalScroll, mNeedFitForHorizontalScroll;
     private int mLastDx = 0;
@@ -108,22 +108,24 @@ public class ColumnLayoutManager extends LinearLayoutManager {
         int columnHeaderCacheWidth = mColumnHeaderLayoutManager.getCacheWidth(columnPosition);
         int columnBottomCacheWidth = mColumnBottomLayoutManager.getCacheWidth(columnPosition);
 
-        int columnCacheWidth = Math.max(columnHeaderCacheWidth, columnBottomCacheWidth);
-        // Already each of them is same width size.
-        if (cacheWidth != -1 && cacheWidth == columnCacheWidth) {
+        // Header
+        if (cacheWidth != -1 && cacheWidth == columnHeaderCacheWidth && cacheWidth == columnBottomCacheWidth) {
             // Control whether we need to set width or not.
             if (child.getMeasuredWidth() != cacheWidth) {
                 TableViewUtils.setWidth(child, cacheWidth);
             }
         } else {
             View columnHeaderChild = mColumnHeaderLayoutManager.findViewByPosition(columnPosition);
-            if (columnHeaderChild == null) {
+            View columnBottomChild = mColumnBottomLayoutManager.findViewByPosition(columnPosition);
+            if (columnHeaderChild == null || columnBottomChild == null) {
                 return;
             }
 
             // Need to calculate which one has the broadest width ?
-            fitWidthSize(child, mYPosition, columnPosition, cacheWidth, columnCacheWidth,
-                    columnHeaderChild);
+            fitWidthSize(child, mYPosition, columnPosition, cacheWidth,
+                    columnHeaderCacheWidth, columnHeaderChild,
+                    columnBottomCacheWidth, columnBottomChild
+            );
         }
 
         // Control all of the rows which has same column position.
@@ -144,8 +146,9 @@ public class ColumnLayoutManager extends LinearLayoutManager {
         mNeedFitForHorizontalScroll = false;
     }
 
-    private void fitWidthSize(@NonNull View child, int row, int column, int cellWidth, int
-            columnHeaderWidth, @NonNull View columnHeaderChild) {
+    private void fitWidthSize(@NonNull View child, int row, int column, int cellWidth,
+                              int columnHeaderWidth, @NonNull View columnHeaderChild,
+                              int columnBottomWidth, @NonNull View columnBottomChild) {
 
         if (cellWidth == -1) {
             // Alternatively, TableViewUtils.getWidth(child);
@@ -157,14 +160,18 @@ public class ColumnLayoutManager extends LinearLayoutManager {
             columnHeaderWidth = columnHeaderChild.getMeasuredWidth();
         }
 
+        if (columnBottomWidth == -1) {
+            // Alternatively, TableViewUtils.getWidth(columnHeaderChild)
+            columnBottomWidth = columnBottomChild.getMeasuredWidth();
+        }
+
         if (cellWidth != 0) {
 
-            if (columnHeaderWidth > cellWidth) {
-                cellWidth = columnHeaderWidth;
+            int max = Math.max(Math.max(cellWidth, columnHeaderWidth), columnBottomWidth);
 
-            } else if (cellWidth > columnHeaderWidth) {
-                columnHeaderWidth = cellWidth;
-            }
+            cellWidth = max;
+            columnHeaderWidth = max;
+            columnBottomWidth = max;
 
             // Control whether column header needs to be change interns of width
             if (columnHeaderWidth != columnHeaderChild.getWidth()) {
@@ -173,10 +180,16 @@ public class ColumnLayoutManager extends LinearLayoutManager {
                 mNeedFitForHorizontalScroll = true;
             }
 
+            if (columnBottomWidth != columnBottomChild.getWidth()) {
+                TableViewUtils.setWidth(columnBottomChild, columnBottomWidth);
+                mNeedFitForVerticalScroll = true;
+                mNeedFitForHorizontalScroll = true;
+            }
+
             // Set the value to cache it for column header.
             mColumnHeaderLayoutManager.setCacheWidth(column, columnHeaderWidth);
+            mColumnBottomLayoutManager.setCacheWidth(column, columnBottomWidth);
         }
-
 
         // Set the width value to cache it for cell .
         TableViewUtils.setWidth(child, cellWidth);
@@ -205,10 +218,12 @@ public class ColumnLayoutManager extends LinearLayoutManager {
     public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State
             state) {
         if (mColumnHeaderRecyclerView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE &&
+                mColumnBottomRecyclerView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE &&
                 mCellRowRecyclerView.isScrollOthers()) {
             // Every CellRowRecyclerViews should be scrolled after the ColumnHeaderRecyclerView.
             // Because it is the main compared one to make each columns fit.
             mColumnHeaderRecyclerView.scrollBy(dx, 0);
+            mColumnBottomRecyclerView.scrollBy(dx, 0);
         }
         // It is important to determine the next attached view to fit all columns
         mLastDx = dx;

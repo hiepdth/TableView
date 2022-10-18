@@ -208,7 +208,7 @@ public class HorizontalRecyclerViewListener extends RecyclerView.OnScrollListene
         } else if (recyclerView == mColumnBottomRecyclerView) {
             super.onScrolled(recyclerView, dx, dy);
 
-            // Scroll bottom cloumn
+            // Scroll header cloumn
             mColumnHeaderRecyclerView.scrollBy(dx, dy);
 
             // Scroll each cell recyclerViews

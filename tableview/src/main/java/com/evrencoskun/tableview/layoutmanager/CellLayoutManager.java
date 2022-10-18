@@ -258,6 +258,7 @@ public class CellLayoutManager extends LinearLayoutManager {
         // header views
         // without using requestLayout().
         mColumnHeaderLayoutManager.customRequestLayout();
+        mColumnBottomLayoutManager.customRequestLayout();
 
         // Get the right scroll position information from Column header RecyclerView
         int columnHeaderScrollPosition = mTableView.getColumnHeaderRecyclerView().getScrolledX();
@@ -272,6 +273,19 @@ public class CellLayoutManager extends LinearLayoutManager {
                     columnHeaderFirstItem);
         }
 
+        // Get the right scroll position information from Column header RecyclerView
+        int columnBottomScrollPosition = mTableView.getColumnBottomRecyclerView().getScrolledX();
+        int columnBottomOffset = mColumnBottomLayoutManager.getFirstItemLeft();
+        int columnBottomFirstItem = mColumnBottomLayoutManager.findFirstVisibleItemPosition();
+
+        // Fit all visible columns widths
+        for (int i = mColumnBottomLayoutManager.findFirstVisibleItemPosition(); i <
+                mColumnBottomLayoutManager.findLastVisibleItemPosition() + 1; i++) {
+
+            fitSize2(i, scrollingLeft, columnBottomScrollPosition, columnBottomOffset,
+                    columnBottomFirstItem);
+        }
+
         mNeedSetLeft = false;
     }
 
@@ -284,6 +298,7 @@ public class CellLayoutManager extends LinearLayoutManager {
         // header views
         // without using requestLayout().
         mColumnHeaderLayoutManager.customRequestLayout();
+        mColumnBottomLayoutManager.customRequestLayout();
 
         // Get the right scroll position information from Column header RecyclerView
         int columnHeaderScrollPosition = mTableView.getColumnHeaderRecyclerView().getScrolledX();
@@ -293,6 +308,16 @@ public class CellLayoutManager extends LinearLayoutManager {
         // Fit all visible columns widths
         fitSize2(position, scrollingLeft, columnHeaderScrollPosition, columnHeaderOffset,
                 columnHeaderFirstItem);
+
+
+        // Get the right scroll position information from Column bottom RecyclerView
+        int columnBottomScrollPosition = mTableView.getColumnBottomRecyclerView().getScrolledX();
+        int columnBottomOffset = mColumnBottomLayoutManager.getFirstItemLeft();
+        int columnBottomFirstItem = mColumnBottomLayoutManager.findFirstVisibleItemPosition();
+
+        // Fit all visible columns widths
+        fitSize2(position, scrollingLeft, columnBottomScrollPosition, columnBottomOffset,
+                columnBottomFirstItem);
 
 
         mNeedSetLeft = false;
